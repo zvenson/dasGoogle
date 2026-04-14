@@ -10,6 +10,28 @@ oder Shopware-Hosting? Schreib uns: [shopware@designburg.net](mailto:shopware@de
 
 ---
 
+## Warum dieses Plugin?
+
+Wir haben für unsere eigenen Shops nach einer günstigen Möglichkeit gesucht,
+**echte Kundenbewertungen** im Storefront anzuzeigen. Etablierte Bewertungs­
+plattformen wie Trusted Shops sind hervorragende Produkte, für unsere Shopgröße
+aber wirtschaftlich nicht darstellbar gewesen – die laufenden Kosten standen in
+keinem Verhältnis zum Nutzen.
+
+Da viele unserer Kunden ohnehin eine **Google-Business-Bewertung** hinterlassen,
+lag es nahe, genau diese direkt im Shop einzubinden. Das Plugin nutzt die
+offizielle Google Places API, ist mit dem $200 Gratis-Guthaben pro Monat in den
+meisten Fällen praktisch kostenlos und zeigt die Sterne plus die letzten
+Rezensionen direkt im Shop an.
+
+> **Hinweis:** Google-Bewertungen sind kein vollständiger Ersatz für ein
+> zertifiziertes Gütesiegel inklusive Käuferschutz. Wer ein solches Siegel
+> braucht, ist mit Anbietern wie Trusted Shops, eKomi oder Trustpilot
+> weiterhin gut bedient. Dieses Plugin ist die schlankere Lösung für alle, die
+> einfach nur ihre vorhandenen Google-Bewertungen sichtbar machen wollen.
+
+---
+
 ## Features
 
 - **Floating Widget** auf jeder Storefront-Seite – Position und Farbe konfigurierbar

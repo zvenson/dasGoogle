@@ -1,28 +1,5 @@
 # SvenDasGoogle - Handbuch
 
-## Warum dieses Plugin?
-
-Wir haben fuer unsere eigenen Shops nach einer guenstigen Moeglichkeit
-gesucht, **echte Kundenbewertungen** im Storefront anzuzeigen. Etablierte
-Bewertungsplattformen wie Trusted Shops sind hervorragende Produkte, fuer
-unsere Shopgroesse aber wirtschaftlich nicht darstellbar gewesen - die
-laufenden Kosten standen in keinem Verhaeltnis zum Nutzen.
-
-Da viele unserer Kunden ohnehin eine **Google-Business-Bewertung**
-hinterlassen, lag es nahe, genau diese direkt im Shop einzubinden. Das
-Plugin nutzt die offizielle Google Places API, ist mit dem $200
-Gratis-Guthaben pro Monat in den meisten Faellen praktisch kostenlos und
-zeigt die Sterne plus die letzten Rezensionen direkt im Shop an.
-
-> **Hinweis:** Google-Bewertungen sind kein vollstaendiger Ersatz fuer ein
-> zertifiziertes Guetesiegel inklusive Kaeuferschutz. Wer ein solches
-> Siegel braucht (z.B. fuer bestimmte Conversion-Use-Cases), ist mit
-> Anbietern wie Trusted Shops, eKomi oder Trustpilot weiterhin gut
-> bedient. Dieses Plugin ist die schlankere Loesung fuer alle, die
-> einfach nur ihre vorhandenen Google-Bewertungen sichtbar machen wollen.
-
----
-
 ## Einrichtung in 3 Schritten
 
 ---
