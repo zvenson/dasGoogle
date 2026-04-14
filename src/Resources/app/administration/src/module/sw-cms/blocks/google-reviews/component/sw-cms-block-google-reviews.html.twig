@@ -1,0 +1,9 @@
+{% block sw_cms_block_google_reviews %}
+<div class="sw-cms-block-google-reviews">
+    <slot name="content">
+        <div class="sw-cms-slot">
+            <sw-cms-slot :element="slotElement('content')" />
+        </div>
+    </slot>
+</div>
+{% endblock %}

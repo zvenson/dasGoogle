@@ -1,0 +1,31 @@
+{
+  "main.js": {
+    "file": "assets/sven-das-google-DCnYZzSq.js",
+    "name": "sven-das-google",
+    "src": "main.js",
+    "isEntry": true,
+    "dynamicImports": [
+      "module/sw-cms/elements/google-reviews/component/index.js",
+      "module/sw-cms/elements/google-reviews/preview/index.js",
+      "module/sw-cms/elements/google-reviews/config/index.js"
+    ]
+  },
+  "module/sw-cms/elements/google-reviews/component/index.js": {
+    "file": "assets/index-D40J8KTu.js",
+    "name": "index",
+    "src": "module/sw-cms/elements/google-reviews/component/index.js",
+    "isDynamicEntry": true
+  },
+  "module/sw-cms/elements/google-reviews/config/index.js": {
+    "file": "assets/index-Nn3sUIsn.js",
+    "name": "index",
+    "src": "module/sw-cms/elements/google-reviews/config/index.js",
+    "isDynamicEntry": true
+  },
+  "module/sw-cms/elements/google-reviews/preview/index.js": {
+    "file": "assets/index-CNYQyOLK.js",
+    "name": "index",
+    "src": "module/sw-cms/elements/google-reviews/preview/index.js",
+    "isDynamicEntry": true
+  }
+}

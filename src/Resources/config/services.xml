@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+               https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <!-- Entity Definition -->
+        <service id="Sven\DasGoogle\Entity\GoogleReview\GoogleReviewDefinition">
+            <tag name="shopware.entity.definition" entity="sven_das_google_review"/>
+        </service>
+
+        <!-- Google Places Service -->
+        <service id="Sven\DasGoogle\Service\GooglePlacesService">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="cache.object"/>
+            <argument type="service" id="sven_das_google_review.repository"/>
+        </service>
+
+        <!-- Storefront Subscriber (Floating Widget) -->
+        <service id="Sven\DasGoogle\Subscriber\StorefrontSubscriber">
+            <argument type="service" id="Sven\DasGoogle\Service\GooglePlacesService"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- API Test Controller -->
+        <service id="Sven\DasGoogle\Controller\Api\GoogleApiTestController" public="true">
+            <argument type="service" id="Sven\DasGoogle\Service\GooglePlacesService"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <tag name="container.service_subscriber"/>
+        </service>
+
+        <!-- Test Command -->
+        <service id="Sven\DasGoogle\Command\TestConnectionCommand">
+            <argument type="service" id="Sven\DasGoogle\Service\GooglePlacesService"/>
+            <tag name="console.command"/>
+        </service>
+
+        <!-- CMS Element Resolver -->
+        <service id="Sven\DasGoogle\Cms\GoogleReviewsCmsElementResolver">
+            <argument type="service" id="Sven\DasGoogle\Service\GooglePlacesService"/>
+            <tag name="shopware.cms.data_resolver"/>
+        </service>
+
+    </services>
+</container>

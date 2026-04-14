@@ -1,0 +1,237 @@
+{% block element_google_reviews %}
+<div class="cms-element-google-reviews sdg-reviews-element">
+
+    {% set data = element.data %}
+
+    {% if data is not null and data.reviews is defined %}
+        {% set showHeader = element.config.showHeader.value|default(true) %}
+
+        {% if showHeader %}
+            <div class="sdg-reviews-element__header">
+                <h3>Das sagen unsere Kunden</h3>
+                <div class="sdg-reviews-element__overall">
+                    <span class="sdg-reviews-element__overall-rating">{{ data.rating|number_format(1, ',') }}</span>
+                    <span class="sdg-reviews-element__overall-stars">
+                        {% for i in 1..5 %}
+                            <span class="sdg-star {{ data.rating >= i ? 'sdg-star--full' : (data.rating >= (i - 0.5) ? 'sdg-star--half' : '') }}">&#9733;</span>
+                        {% endfor %}
+                    </span>
+                    <span class="sdg-reviews-element__overall-count">({{ data.userRatingsTotal }} Bewertungen)</span>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if data.reviews|length > 0 %}
+            <div class="sdg-reviews-carousel" data-sdg-reviews-carousel="true">
+                <button class="sdg-reviews-carousel__nav sdg-reviews-carousel__nav--prev" aria-label="Vorherige">&#8249;</button>
+
+                <div class="sdg-reviews-carousel__track">
+                    {% for review in data.reviews %}
+                        <div class="sdg-reviews-carousel__item"
+                             data-sdg-author="{{ review.authorName }}"
+                             data-sdg-rating="{{ review.rating }}"
+                             data-sdg-time="{{ review.relativeTimeDescription }}"
+                             data-sdg-photo="{{ review.profilePhotoUrl }}">
+                            <div class="sdg-reviews-carousel__review-header">
+                                {% if review.profilePhotoUrl %}
+                                    <img class="sdg-reviews-carousel__avatar" src="{{ review.profilePhotoUrl }}" alt="{{ review.authorName }}" loading="lazy" width="36" height="36">
+                                {% else %}
+                                    <div class="sdg-reviews-carousel__avatar sdg-reviews-carousel__avatar--placeholder">{{ review.authorName|first|upper }}</div>
+                                {% endif %}
+                                <div class="sdg-reviews-carousel__meta">
+                                    <strong>{{ review.authorName }}</strong>
+                                    <span class="sdg-reviews-carousel__date">
+                                        {{ review.relativeTimeDescription }}
+                                        <span style="color:#4285f4;" title="Verifiziert">&#10003;</span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="sdg-reviews-carousel__stars">
+                                {% for i in 1..5 %}
+                                    <span class="sdg-star {{ review.rating >= i ? 'sdg-star--full' : '' }}">&#9733;</span>
+                                {% endfor %}
+                            </div>
+
+                            {% if review.text %}
+                                <p class="sdg-reviews-carousel__text">
+                                    {% if review.text|length > 200 %}
+                                        {{ review.text[:200] }}...
+                                        <button class="sdg-reviews-carousel__read-more" data-sdg-read-more="{{ review.text|e('html_attr') }}">Mehr lesen</button>
+                                    {% else %}
+                                        {{ review.text }}
+                                    {% endif %}
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button class="sdg-reviews-carousel__nav sdg-reviews-carousel__nav--next" aria-label="Naechste">&#8250;</button>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <div style="padding: 20px; text-align: center; color: #999;">
+            Google Bewertungen konnten nicht geladen werden. Bitte API Key und Place ID in der Plugin-Konfiguration pruefen.
+        </div>
+    {% endif %}
+
+</div>
+
+<style>
+.sdg-reviews-element__header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+.sdg-reviews-element__header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 8px;
+}
+.sdg-reviews-element__overall {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.sdg-reviews-element__overall-rating {
+    font-size: 24px;
+    font-weight: 700;
+    color: #222;
+}
+.sdg-reviews-element__overall-stars .sdg-star {
+    font-size: 20px;
+}
+.sdg-reviews-element__overall-count {
+    font-size: 13px;
+    color: #777;
+}
+
+/* Stars */
+.sdg-star { color: #ddd; font-size: 14px; line-height: 1; }
+.sdg-star--full { color: #fbbc05; }
+.sdg-star--half { color: #fbbc05; opacity: 0.6; }
+
+/* Carousel */
+.sdg-reviews-carousel {
+    position: relative;
+    padding: 0 24px;
+}
+.sdg-reviews-carousel__track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    padding: 4px 0;
+}
+.sdg-reviews-carousel__track::-webkit-scrollbar { display: none; }
+
+.sdg-reviews-carousel__item {
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+    background: #fff;
+    border: 1px solid #e5e8eb;
+    border-radius: 8px;
+    padding: 16px;
+    transition: box-shadow 0.2s ease;
+}
+.sdg-reviews-carousel__item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Nav buttons */
+.sdg-reviews-carousel__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 22px;
+    color: #333;
+    z-index: 2;
+}
+.sdg-reviews-carousel__nav:hover {
+    background: #f0f0f0;
+}
+.sdg-reviews-carousel__nav--prev { left: -6px; }
+.sdg-reviews-carousel__nav--next { right: -6px; }
+
+/* Review card content */
+.sdg-reviews-carousel__review-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.sdg-reviews-carousel__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.sdg-reviews-carousel__avatar--placeholder {
+    background: #4285f4;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+.sdg-reviews-carousel__meta {
+    flex: 1;
+    min-width: 0;
+}
+.sdg-reviews-carousel__meta strong {
+    display: block;
+    font-size: 13px;
+    color: #222;
+}
+.sdg-reviews-carousel__date {
+    font-size: 12px;
+    color: #999;
+}
+.sdg-reviews-carousel__stars {
+    margin-bottom: 8px;
+}
+.sdg-reviews-carousel__stars .sdg-star { font-size: 14px; }
+.sdg-reviews-carousel__text {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.5;
+    margin: 0;
+}
+.sdg-reviews-carousel__read-more {
+    color: #4285f4;
+    cursor: pointer;
+    font-size: 12px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-top: 4px;
+    display: inline-block;
+}
+.sdg-reviews-carousel__read-more:hover { text-decoration: underline; }
+
+@media (max-width: 767px) {
+    .sdg-reviews-carousel__item { flex: 0 0 260px; }
+    .sdg-reviews-carousel__nav { display: none; }
+    .sdg-reviews-carousel { padding: 0; }
+}
+</style>
+{% endblock %}

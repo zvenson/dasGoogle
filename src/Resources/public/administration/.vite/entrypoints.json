@@ -1,0 +1,27 @@
+{
+  "base": "/bundles/svendasgoogle/administration/",
+  "entryPoints": {
+    "sven-das-google": {
+      "css": [],
+      "dynamic": [
+        "/bundles/svendasgoogle/administration/assets/index-D40J8KTu.js",
+        "/bundles/svendasgoogle/administration/assets/index-CNYQyOLK.js",
+        "/bundles/svendasgoogle/administration/assets/index-Nn3sUIsn.js"
+      ],
+      "js": [
+        "/bundles/svendasgoogle/administration/assets/sven-das-google-DCnYZzSq.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.1.0",
+    7,
+    1,
+    0
+  ],
+  "viteServer": null
+}

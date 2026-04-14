@@ -1,0 +1,23 @@
+{% block sw_cms_el_config_google_reviews %}
+<div class="sw-cms-el-config-google-reviews">
+    <sw-number-field
+        :value="element.config.maxReviews.value"
+        label="Anzahl Bewertungen"
+        :min="1"
+        :max="50"
+        :step="1"
+        @update:value="onMaxReviewsChange"
+    />
+
+    <p style="margin-top: 4px; color: #758ca3; font-size: 12px;">
+        Bewertungen werden lokal gespeichert und wachsen ueber die Zeit.
+    </p>
+
+    <sw-switch-field
+        :value="element.config.showHeader.value"
+        label="Header mit Gesamtbewertung anzeigen"
+        style="margin-top: 16px;"
+        @update:value="onShowHeaderChange"
+    />
+</div>
+{% endblock %}

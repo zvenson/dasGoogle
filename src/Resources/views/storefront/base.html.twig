@@ -1,0 +1,287 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_body %}
+    {{ parent() }}
+
+    {% if svenDasGoogleWidget is defined and svenDasGoogleWidget.active %}
+        {% set widget = svenDasGoogleWidget %}
+        {% set place = widget.placeData %}
+
+        <div class="sdg-widget"
+             data-sdg-rating-widget="true"
+             data-sdg-rating-widget-options='{{ {
+                 position: widget.position,
+                 googleUrl: place.url
+             }|json_encode }}'>
+
+            <div class="sdg-widget__badge" title="Google Bewertungen anzeigen">
+                <div class="sdg-widget__google-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                </div>
+                <div class="sdg-widget__stars">
+                    {% for i in 1..5 %}
+                        <span class="sdg-star {{ place.rating >= i ? 'sdg-star--full' : (place.rating >= (i - 0.5) ? 'sdg-star--half' : '') }}">&#9733;</span>
+                    {% endfor %}
+                </div>
+                <div class="sdg-widget__rating-text">
+                    <strong>{{ place.rating|number_format(1, ',') }}</strong>/5
+                </div>
+            </div>
+
+            <div class="sdg-widget__panel">
+                <div class="sdg-widget__panel-header">
+                    <div class="sdg-widget__google-icon">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                    </div>
+                    <div class="sdg-widget__panel-title">
+                        <strong>Google Bewertungen</strong>
+                        <div class="sdg-widget__panel-subtitle">{{ place.name }}</div>
+                    </div>
+                    <button class="sdg-widget__close" aria-label="Schliessen">&times;</button>
+                </div>
+
+                <div class="sdg-widget__panel-rating">
+                    <span class="sdg-widget__panel-rating-number">{{ place.rating|number_format(1, ',') }}</span>
+                    <div class="sdg-widget__panel-stars">
+                        {% for i in 1..5 %}
+                            <span class="sdg-star {{ place.rating >= i ? 'sdg-star--full' : (place.rating >= (i - 0.5) ? 'sdg-star--half' : '') }}">&#9733;</span>
+                        {% endfor %}
+                    </div>
+                    <span class="sdg-widget__panel-count">{{ place.userRatingsTotal }} Bewertungen</span>
+                </div>
+
+                <div class="sdg-widget__panel-scroll">
+                    {% for review in place.reviews %}
+                        <div class="sdg-widget__review"
+                             data-sdg-author="{{ review.authorName }}"
+                             data-sdg-rating="{{ review.rating }}"
+                             data-sdg-time="{{ review.relativeTimeDescription }}"
+                             data-sdg-photo="{{ review.profilePhotoUrl }}">
+                            <div class="sdg-widget__review-header">
+                                {% if review.profilePhotoUrl %}
+                                    <img class="sdg-widget__review-avatar" src="{{ review.profilePhotoUrl }}" alt="{{ review.authorName }}" loading="lazy" width="32" height="32">
+                                {% else %}
+                                    <div class="sdg-widget__review-avatar sdg-widget__review-avatar--placeholder">{{ review.authorName|first|upper }}</div>
+                                {% endif %}
+                                <div class="sdg-widget__review-meta">
+                                    <strong>{{ review.authorName }}</strong>
+                                    <span class="sdg-widget__review-time">{{ review.relativeTimeDescription }}</span>
+                                </div>
+                            </div>
+                            <div class="sdg-widget__review-stars">
+                                {% for i in 1..5 %}
+                                    <span class="sdg-star {{ review.rating >= i ? 'sdg-star--full' : '' }}">&#9733;</span>
+                                {% endfor %}
+                            </div>
+                            {% if review.text %}
+                                <p class="sdg-widget__review-text">
+                                    {% if review.text|length > 150 %}
+                                        {{ review.text[:150] }}...
+                                        <button class="sdg-widget__read-more" data-sdg-read-more="{{ review.text|e('html_attr') }}">Mehr lesen</button>
+                                    {% else %}
+                                        {{ review.text }}
+                                    {% endif %}
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <a href="{{ place.url }}" target="_blank" rel="noopener noreferrer" class="sdg-widget__panel-link">
+                    Alle {{ place.userRatingsTotal }} Bewertungen auf Google ansehen &rarr;
+                </a>
+            </div>
+        </div>
+
+        <style>
+        /* Widget Container */
+        .sdg-widget {
+            position: fixed;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+            {% if widget.position == 'left' %}
+                left: 0;
+            {% else %}
+                right: 0;
+            {% endif %}
+            {% if widget.verticalPosition == 'top' %}
+                top: 120px;
+            {% elseif widget.verticalPosition == 'bottom' %}
+                bottom: 120px;
+            {% else %}
+                top: 50%;
+                transform: translateY(-50%);
+            {% endif %}
+        }
+
+        /* Stars */
+        .sdg-star { color: #ddd; font-size: 14px; line-height: 1; }
+        .sdg-star--full { color: #fbbc05; }
+        .sdg-star--half { color: #fbbc05; opacity: 0.6; }
+
+        /* Badge */
+        .sdg-widget__badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 10px;
+            background: {{ widget.backgroundColor }};
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            {% if widget.position == 'left' %}
+                border-radius: 0 8px 8px 0;
+                box-shadow: 2px 2px 10px rgba(0,0,0,0.15);
+            {% else %}
+                border-radius: 8px 0 0 8px;
+                box-shadow: -2px 2px 10px rgba(0,0,0,0.15);
+            {% endif %}
+        }
+        .sdg-widget__badge:hover { transform: scale(1.03); }
+        .sdg-widget.is-open .sdg-widget__badge { display: none; }
+
+        .sdg-widget__google-icon { display: flex; align-items: center; justify-content: center; }
+        .sdg-widget__stars { display: flex; gap: 1px; }
+        .sdg-widget__rating-text { font-size: 12px; color: #555; white-space: nowrap; }
+        .sdg-widget__rating-text strong { color: #222; }
+
+        /* Panel */
+        .sdg-widget__panel {
+            display: none;
+            position: absolute;
+            {% if widget.verticalPosition == 'bottom' %}
+                bottom: 0;
+            {% else %}
+                top: 0;
+            {% endif %}
+            {% if widget.position == 'left' %}
+                left: 0;
+                border-radius: 0 8px 8px 0;
+            {% else %}
+                right: 0;
+                border-radius: 8px 0 0 8px;
+            {% endif %}
+            width: 340px;
+            max-height: 80vh;
+            background: {{ widget.backgroundColor }};
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .sdg-widget.is-open .sdg-widget__panel {
+            display: flex;
+            animation: sdgSlideIn 0.3s ease;
+        }
+        @keyframes sdgSlideIn {
+            from { opacity: 0; transform: translateX({{ widget.position == 'left' ? '-' : '' }}20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Panel header */
+        .sdg-widget__panel-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #eee;
+            flex-shrink: 0;
+        }
+        .sdg-widget__panel-title { flex: 1; }
+        .sdg-widget__panel-title strong { display: block; font-size: 14px; color: #222; }
+        .sdg-widget__panel-subtitle { font-size: 12px; color: #777; margin-top: 2px; }
+        .sdg-widget__close {
+            background: none; border: none; font-size: 22px;
+            color: #999; cursor: pointer; padding: 0 4px; line-height: 1;
+        }
+        .sdg-widget__close:hover { color: #333; }
+
+        /* Panel rating */
+        .sdg-widget__panel-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+            flex-shrink: 0;
+        }
+        .sdg-widget__panel-rating-number { font-size: 28px; font-weight: 700; color: #222; }
+        .sdg-widget__panel-stars { display: flex; gap: 2px; }
+        .sdg-widget__panel-stars .sdg-star { font-size: 18px; }
+        .sdg-widget__panel-count { font-size: 12px; color: #777; }
+
+        /* Scrollable reviews */
+        .sdg-widget__panel-scroll {
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Review items */
+        .sdg-widget__review {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .sdg-widget__review:last-child { border-bottom: none; }
+        .sdg-widget__review-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .sdg-widget__review-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .sdg-widget__review-avatar--placeholder {
+            background: #4285f4; color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 14px;
+            width: 32px; height: 32px; border-radius: 50%;
+        }
+        .sdg-widget__review-meta { flex: 1; min-width: 0; }
+        .sdg-widget__review-meta strong { display: block; font-size: 13px; color: #222; }
+        .sdg-widget__review-time { font-size: 11px; color: #999; }
+        .sdg-widget__review-stars { margin-bottom: 4px; }
+        .sdg-widget__review-stars .sdg-star { font-size: 12px; }
+        .sdg-widget__review-text { font-size: 13px; color: #444; margin: 0; line-height: 1.5; }
+        .sdg-widget__read-more {
+            color: #4285f4; cursor: pointer; font-size: 12px;
+            background: none; border: none; padding: 0; margin-top: 4px; display: inline-block;
+        }
+        .sdg-widget__read-more:hover { text-decoration: underline; }
+
+        /* Sticky link at bottom */
+        .sdg-widget__panel-link {
+            display: block;
+            text-align: center;
+            padding: 14px 16px;
+            color: #4285f4;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+            border-top: 1px solid #eee;
+            background: {{ widget.backgroundColor }};
+            flex-shrink: 0;
+        }
+        .sdg-widget__panel-link:hover { background: #f8f9fa; color: #1a73e8; }
+
+        @media (max-width: 767px) {
+            .sdg-widget__panel { width: 300px; }
+        }
+        </style>
+    {% endif %}
+{% endblock %}

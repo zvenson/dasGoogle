@@ -1,0 +1,48 @@
+{
+    "name": "sven/das-google",
+    "description": "Google Business Bewertungen als Floating-Widget und CMS-Element fuer Erlebniswelten.",
+    "version": "2.1.1",
+    "type": "shopware-platform-plugin",
+    "license": "proprietary",
+    "homepage": "https://designburg.net",
+    "authors": [
+        {
+            "name": "Designburg.net",
+            "email": "kontakt@designburg.net",
+            "homepage": "https://designburg.net",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "kontakt@designburg.net",
+        "issues": "https://github.com/zvenson/dasGoogle/issues",
+        "source": "https://github.com/zvenson/dasGoogle"
+    },
+    "require": {
+        "shopware/core": ">=6.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sven\\DasGoogle\\": "src/"
+        }
+    },
+    "extra": {
+        "shopware-plugin-class": "Sven\\DasGoogle\\SvenDasGoogle",
+        "label": {
+            "de-DE": "Google Business Bewertungen by Designburg.net",
+            "en-GB": "Google Business Reviews by Designburg.net"
+        },
+        "description": {
+            "de-DE": "Zeigt Google Business Bewertungen als schwebendes Widget und als CMS-Element in Erlebniswelten an. Entwickelt von Designburg.net (https://designburg.net).",
+            "en-GB": "Displays Google Business reviews as a floating widget and as a CMS element in Shopping Experiences. Developed by Designburg.net (https://designburg.net)."
+        },
+        "manufacturerLink": {
+            "de-DE": "https://designburg.net",
+            "en-GB": "https://designburg.net"
+        },
+        "supportLink": {
+            "de-DE": "https://designburg.net",
+            "en-GB": "https://designburg.net"
+        }
+    }
+}

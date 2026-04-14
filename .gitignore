@@ -1,0 +1,9 @@
+/vendor/
+/var/
+/.idea/
+/.vscode/
+*.log
+.DS_Store
+Thumbs.db
+composer.lock
+*.zip

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Google Places API</title>
+        <title lang="de-DE">Google Places API</title>
+
+        <component name="sdg-api-test">
+            <name>apiTest</name>
+            <label>Verbindung testen</label>
+            <label lang="en-GB">Test connection</label>
+        </component>
+
+        <input-field>
+            <name>googleApiKey</name>
+            <label>Google API Key</label>
+            <label lang="de-DE">Google API Key</label>
+            <helpText>API-Key aus der Google Cloud Console mit aktivierter Places API.</helpText>
+            <helpText lang="en-GB">API key from Google Cloud Console with Places API enabled.</helpText>
+        </input-field>
+
+        <input-field>
+            <name>googlePlaceId</name>
+            <label>Google Place ID</label>
+            <label lang="de-DE">Google Place ID</label>
+            <helpText>Die Place-ID Ihres Google Business Profils. Zu finden unter: https://developers.google.com/maps/documentation/places/web-service/place-id</helpText>
+            <helpText lang="en-GB">The Place ID of your Google Business Profile.</helpText>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Floating Widget</title>
+        <title lang="de-DE">Schwebendes Widget</title>
+
+        <input-field type="bool">
+            <name>widgetActive</name>
+            <label>Widget aktivieren</label>
+            <label lang="en-GB">Enable widget</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>widgetPosition</name>
+            <label>Position</label>
+            <label lang="de-DE">Position</label>
+            <defaultValue>right</defaultValue>
+            <options>
+                <option>
+                    <id>left</id>
+                    <name>Links</name>
+                    <name lang="en-GB">Left</name>
+                </option>
+                <option>
+                    <id>right</id>
+                    <name>Rechts</name>
+                    <name lang="en-GB">Right</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>widgetVerticalPosition</name>
+            <label>Vertikale Position</label>
+            <label lang="en-GB">Vertical position</label>
+            <defaultValue>center</defaultValue>
+            <options>
+                <option>
+                    <id>top</id>
+                    <name>Oben</name>
+                    <name lang="en-GB">Top</name>
+                </option>
+                <option>
+                    <id>center</id>
+                    <name>Mitte</name>
+                    <name lang="en-GB">Center</name>
+                </option>
+                <option>
+                    <id>bottom</id>
+                    <name>Unten</name>
+                    <name lang="en-GB">Bottom</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="single-select">
+            <name>minRating</name>
+            <label>Mindestbewertung (Sterne)</label>
+            <label lang="en-GB">Minimum rating (stars)</label>
+            <helpText>Nur Bewertungen mit mindestens so vielen Sternen anzeigen.</helpText>
+            <helpText lang="en-GB">Only show reviews with at least this many stars.</helpText>
+            <defaultValue>4</defaultValue>
+            <options>
+                <option>
+                    <id>1</id>
+                    <name>1 Stern (alle)</name>
+                    <name lang="en-GB">1 star (all)</name>
+                </option>
+                <option>
+                    <id>2</id>
+                    <name>2 Sterne</name>
+                    <name lang="en-GB">2 stars</name>
+                </option>
+                <option>
+                    <id>3</id>
+                    <name>3 Sterne</name>
+                    <name lang="en-GB">3 stars</name>
+                </option>
+                <option>
+                    <id>4</id>
+                    <name>4 Sterne</name>
+                    <name lang="en-GB">4 stars</name>
+                </option>
+                <option>
+                    <id>5</id>
+                    <name>5 Sterne</name>
+                    <name lang="en-GB">5 stars</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="colorpicker">
+            <name>widgetBackgroundColor</name>
+            <label>Hintergrundfarbe</label>
+            <label lang="en-GB">Background color</label>
+            <defaultValue>#ffffff</defaultValue>
+        </input-field>
+
+        <input-field type="int">
+            <name>cacheTtl</name>
+            <label>Cache-Dauer (Stunden)</label>
+            <label lang="en-GB">Cache duration (hours)</label>
+            <helpText>Wie lange die Google-Daten gecacht werden sollen.</helpText>
+            <helpText lang="en-GB">How long the Google data should be cached.</helpText>
+            <defaultValue>6</defaultValue>
+        </input-field>
+    </card>
+</config>

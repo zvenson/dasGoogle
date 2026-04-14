@@ -1,0 +1,22 @@
+<div style="margin-top: 8px;">
+    <p style="margin-bottom: 12px; color: #6b7280; font-size: 14px;">
+        Teste ob API Key und Place ID funktionieren.
+        <strong>Bitte zuerst speichern</strong>, dann testen.
+    </p>
+
+    <sw-button
+        variant="primary"
+        :isLoading="isLoading"
+        :disabled="isLoading"
+        @click="testConnection">
+        Verbindung testen
+    </sw-button>
+
+    <div v-if="testResult" style="margin-top: 12px;">
+        <sw-alert
+            :variant="testResult.success ? 'success' : 'error'"
+            :closable="false">
+            {{ testResult.message }}
+        </sw-alert>
+    </div>
+</div>
