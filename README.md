@@ -6,7 +6,7 @@ mit Cache und ohne Cookie-Banner-Probleme.
 
 Entwickelt und gepflegt von **[Designburg.net](https://designburg.net)** – Shopware-
 und Web-Agentur aus Hamburg. Brauchst du individuelle Anpassungen, weitere Plugins
-oder Shopware-Hosting? Schreib uns: [kontakt@designburg.net](mailto:kontakt@designburg.net).
+oder Shopware-Hosting? Schreib uns: [shopware@designburg.net](mailto:shopware@designburg.net).
 
 ---
 
@@ -68,7 +68,7 @@ deines Google-Business-Eintrags. Die Schritt-für-Schritt-Anleitung steht im
 Dieses Plugin wird von **[Designburg.net](https://designburg.net)** entwickelt.
 
 - Webseite: <https://designburg.net>
-- Kontakt: [kontakt@designburg.net](mailto:kontakt@designburg.net)
+- Kontakt: [shopware@designburg.net](mailto:shopware@designburg.net)
 - Weitere Shopware-Plugins: <https://designburg.net/shopware>
 
 Für Bug-Reports und Feature-Requests bitte ein

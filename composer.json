@@ -8,13 +8,13 @@
     "authors": [
         {
             "name": "Designburg.net",
-            "email": "kontakt@designburg.net",
+            "email": "shopware@designburg.net",
             "homepage": "https://designburg.net",
             "role": "Developer"
         }
     ],
     "support": {
-        "email": "kontakt@designburg.net",
+        "email": "shopware@designburg.net",
         "issues": "https://github.com/zvenson/dasGoogle/issues",
         "source": "https://github.com/zvenson/dasGoogle"
     },

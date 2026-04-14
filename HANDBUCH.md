@@ -119,5 +119,5 @@ Dieses Plugin wird entwickelt und gepflegt von **[Designburg.net](https://design
 Shopware-Agentur und Plugin-Werkstatt aus Hamburg.
 
 - Webseite: <https://designburg.net>
-- Kontakt / individuelle Anpassungen: [kontakt@designburg.net](mailto:kontakt@designburg.net)
+- Kontakt / individuelle Anpassungen: [shopware@designburg.net](mailto:shopware@designburg.net)
 - Bug-Reports & Feature-Requests: <https://github.com/zvenson/dasGoogle/issues>
