@@ -71,6 +71,7 @@
 | **Vertikale Position** | Oben, Mitte oder Unten | Mitte |
 | **Hintergrundfarbe** | Farbe des Widgets | #ffffff |
 | **Cache-Dauer** | Wie oft neue Daten geholt werden (in Stunden) | 6 |
+| **Bewertungs-URL (optional)** | Leer = automatisch aus Place ID | (leer) |
 
 4. **Speichern** - fertig!
 
@@ -89,6 +90,74 @@ Unter **Inhalte** > **Erlebniswelten** steht ein neuer Block "Google Bewertungen
 - Horizontales Karussell mit den letzten Bewertungen
 - Konfigurierbar: Anzahl der angezeigten Bewertungen (1-10)
 - Header mit Gesamtbewertung ein/ausblendbar
+
+### Bewertungseinladung per Mail (Flow Builder)
+
+Das Plugin liefert ein fertiges Mail-Template **"Google Bewertungseinladung"**,
+mit dem Sie Kunden nach Lieferung um eine Google-Bewertung bitten koennen.
+Der Bewertungslink wird automatisch aus Ihrer Place ID gebildet - Sie muessen
+also nichts manuell pflegen.
+
+**Wichtig (Recht):** Eine Bewertungsaufforderung per Mail gilt in Deutschland
+als Werbung im Sinne von § 7 UWG und ist nur zulaessig, wenn:
+
+1. der Empfaenger **Bestandskunde** ist (er hat bei Ihnen gekauft - bei einer
+   Mail nach Bestellung gegeben), UND
+2. die Mail einen **klaren Hinweis** enthaelt, wie der Kunde dem Empfang
+   widersprechen kann (im mitgelieferten Template enthalten - bitte bei
+   Anpassungen nicht entfernen), UND
+3. der Kunde dem Erhalt von Werbung **nicht widersprochen** hat.
+
+Bei Unsicherheit halten Sie bitte Ruecksprache mit Ihrem Anwalt. Eine
+saubere Alternative ist ein expliziter Opt-In im Checkout
+("Ich moechte spaeter um eine Bewertung gebeten werden").
+
+#### Schritt 1: Flow im Admin anlegen
+
+1. Im Admin zu **Einstellungen** > **Flows** gehen
+2. Auf **"Flow hinzufuegen"** klicken
+3. **Name:** "Google Bewertung anfordern" (frei waehlbar)
+4. **Trigger:** `Checkout > Order > State changed`
+   (oder spezifischer: `Order delivery > State enter > Shipped`)
+5. **Bedingung:** Sales Channel einschraenken, falls Sie nur fuer bestimmte
+   Shops senden moechten
+
+#### Schritt 2: Verzoegerung einbauen
+
+Die Mail sollte **nicht** sofort bei Statuswechsel rausgehen, sondern erst,
+wenn das Paket realistisch beim Kunden angekommen ist und benutzt wurde.
+
+1. Im Flow einen Schritt **"Verzoegerung"** hinzufuegen
+2. Wartezeit: **7-14 Tage** ist ein guter Wert
+   (gibt dem Kunden Zeit, das Produkt tatsaechlich auszuprobieren)
+
+#### Schritt 3: Mail senden
+
+1. Nach der Verzoegerung den Schritt **"Mail versenden"** anhaengen
+2. **Empfaenger:** "Kunde"
+3. **Mail-Template:** "Google Bewertungseinladung" (das vom Plugin gelieferte)
+4. Flow **aktivieren** und **speichern**
+
+#### Optional: Bewertungs-URL ueberschreiben
+
+In der Plugin-Konfiguration gibt es das Feld **"Bewertungs-URL (optional)"**.
+Wenn leer, wird die URL automatisch aus der Place ID gebildet. Sie koennen
+das Feld nutzen, wenn Sie z. B. auf eine andere Bewertungsseite verlinken
+moechten (Trustpilot, eKomi, etc. - dann muessten Sie aber das Mail-Template
+inhaltlich anpassen).
+
+#### Verfuegbare Twig-Variablen im Template
+
+| Variable | Beschreibung |
+|----------|-------------|
+| `{{ sdgReviewUrl }}` | Direktlink zur Google-Bewertungsseite (automatisch) |
+| `{{ order.orderNumber }}` | Bestellnummer |
+| `{{ order.orderCustomer.firstName }}` | Vorname des Kunden |
+| `{{ order.orderCustomer.lastName }}` | Nachname des Kunden |
+| `{{ salesChannel.translated.name }}` | Name des Shops |
+
+Das Template laesst sich im Admin unter **Einstellungen** > **E-Mail-Templates**
+frei anpassen.
 
 ---
 

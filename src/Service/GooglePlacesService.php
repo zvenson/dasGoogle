@@ -177,7 +177,9 @@ class GooglePlacesService
     }
 
     /**
-     * Speichert neue Reviews in die Datenbank (upsert nach Autorenname + Place ID).
+     * Speichert neue Reviews in die Datenbank (upsert nach Place ID + Autorenname + Review-Zeit).
+     * Composite Key noetig, weil viele Reviewer nur Vornamen haben - sonst wuerden
+     * verschiedene "Sven"s/"Anna"s sich gegenseitig ueberschreiben.
      */
     private function storeReviews(array $rawReviews, string $placeId): void
     {
@@ -188,9 +190,10 @@ class GooglePlacesService
         $criteria->addFilter(new EqualsFilter('placeId', $placeId));
         $existing = $this->reviewRepository->search($criteria, $context);
 
-        $existingByAuthor = [];
+        $existingByKey = [];
         foreach ($existing as $entity) {
-            $existingByAuthor[$entity->getAuthorName()] = $entity->getId();
+            $key = $entity->getAuthorName() . '|' . $entity->getReviewTime();
+            $existingByKey[$key] = $entity->getId();
         }
 
         $upserts = [];
@@ -198,23 +201,30 @@ class GooglePlacesService
 
         foreach ($rawReviews as $review) {
             $authorName = $review['author_name'] ?? '';
-            if (empty($authorName) || isset($seen[$authorName])) {
+            $reviewTime = (int) ($review['time'] ?? 0);
+
+            if (empty($authorName) || $reviewTime === 0) {
                 continue;
             }
-            $seen[$authorName] = true;
+
+            $key = $authorName . '|' . $reviewTime;
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
 
             $data = [
                 'authorName' => $authorName,
                 'rating' => (int) ($review['rating'] ?? 0),
                 'text' => $review['text'] ?? '',
-                'reviewTime' => (int) ($review['time'] ?? 0),
+                'reviewTime' => $reviewTime,
                 'relativeTimeDescription' => $review['relative_time_description'] ?? '',
                 'profilePhotoUrl' => $review['profile_photo_url'] ?? '',
                 'placeId' => $placeId,
             ];
 
-            if (isset($existingByAuthor[$authorName])) {
-                $data['id'] = $existingByAuthor[$authorName];
+            if (isset($existingByKey[$key])) {
+                $data['id'] = $existingByKey[$key];
             } else {
                 $data['id'] = Uuid::randomHex();
             }

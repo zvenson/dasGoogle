@@ -30,6 +30,19 @@
     </card>
 
     <card>
+        <title>Bewertungseinladung per Mail</title>
+        <title lang="en-GB">Review request via email</title>
+
+        <input-field>
+            <name>googleReviewUrlOverride</name>
+            <label>Bewertungs-URL (optional)</label>
+            <label lang="en-GB">Review URL (optional)</label>
+            <helpText>Leer lassen, dann wird die URL automatisch aus der Place ID gebildet (https://search.google.com/local/writereview?placeid=...). Nur ueberschreiben, wenn auf eine andere Bewertungsseite verlinkt werden soll.</helpText>
+            <helpText lang="en-GB">Leave empty to build the URL automatically from the Place ID. Only override if you want to link to a different review page.</helpText>
+        </input-field>
+    </card>
+
+    <card>
         <title>Floating Widget</title>
         <title lang="de-DE">Schwebendes Widget</title>
 

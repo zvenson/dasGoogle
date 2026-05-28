@@ -25,6 +25,12 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <!-- Mail Subscriber (injects sdgReviewUrl into mail templates) -->
+        <service id="Sven\DasGoogle\Subscriber\MailSubscriber">
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <!-- API Test Controller -->
         <service id="Sven\DasGoogle\Controller\Api\GoogleApiTestController" public="true">
             <argument type="service" id="Sven\DasGoogle\Service\GooglePlacesService"/>
