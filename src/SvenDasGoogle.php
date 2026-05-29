@@ -315,13 +315,19 @@ class SvenDasGoogle extends Plugin
         return [$subjectDe, $subjectEn, $plainDe, $plainEn, $htmlDe, $htmlEn];
     }
 
+    /**
+     * Liefert nur den Mail-Body (kein <html>/<body>, kein eigener Header/Footer).
+     * Shopware wickelt automatisch die per Sales Channel konfigurierte Mail-Kopf-
+     * und Fusszeile (Logo, Adresse, Impressum, Abmelden) drumherum &mdash; genau wie
+     * bei der Bestellbestaetigung und allen anderen Shop-Mails.
+     */
     private function buildHtmlBody(string $lang): string
     {
         $isDe = $lang === 'de';
 
         $greeting   = $isDe ? 'Hallo' : 'Hello';
         $thanksLead = $isDe ? 'vielen Dank fuer Ihre Bestellung' : 'thank you for your order';
-        $orderLbl   = $isDe ? 'Bestellnummer'  : 'Order number';
+        $orderLbl   = $isDe ? 'Bestellnummer' : 'Order number';
         $headline   = $isDe ? 'Wie war es bei uns?' : 'How was it?';
         $body1 = $isDe
             ? 'wir hoffen, alles ist gut bei Ihnen angekommen und Sie sind zufrieden mit Ihrer Bestellung.'
@@ -329,68 +335,32 @@ class SvenDasGoogle extends Plugin
         $body2 = $isDe
             ? 'Wir wuerden uns sehr freuen, wenn Sie sich kurz Zeit nehmen und uns auf Google bewerten. Das hilft uns ungemein &mdash; und anderen Kunden bei der Orientierung.'
             : 'We would be delighted if you could take a moment to leave us a review on Google. It really helps us &mdash; and other customers, too.';
-        $cta        = $isDe ? 'Jetzt auf Google bewerten' : 'Leave a Google review';
-        $thanksOut  = $isDe ? 'Vielen Dank!' : 'Thank you!';
-        $teamLead   = $isDe ? 'Ihr Team von' : 'Your team at';
-        $footerNote = $isDe
-            ? 'Sie moechten keine weiteren Mails dieser Art erhalten? Antworten Sie kurz auf diese Mail mit &bdquo;Abbestellen&ldquo;.'
-            : 'Don\'t want to receive emails like this? Just reply with &bdquo;unsubscribe&ldquo;.';
-        $footerSent = $isDe ? 'Diese E-Mail wurde versendet von' : 'This email was sent by';
+        $cta       = $isDe ? 'Jetzt auf Google bewerten' : 'Leave a Google review';
+        $thanksOut = $isDe ? 'Vielen Dank!' : 'Thank you!';
+        $teamLead  = $isDe ? 'Ihr Team von' : 'Your team at';
 
-        $html  = '<!DOCTYPE html>';
-        $html .= '<html lang="' . $lang . '"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>{{ salesChannel.translated.name }}</title></head>';
-        $html .= '<body style="margin:0;padding:0;background:#f4f6f8;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;color:#222;">';
+        $html  = '<div style="font-family:arial,sans-serif;font-size:12px;line-height:1.5;color:#222;">';
 
-        $html .= '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f6f8;padding:24px 0;">';
-        $html .= '<tr><td align="center">';
+        $html .= $greeting . ' {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }},<br><br>';
 
-        $html .= '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.04);">';
-
-        // Header bar
-        $html .= '<tr><td style="background:#4285F4;padding:24px 32px;text-align:center;">';
-        $html .= '<div style="color:#ffffff;font-size:22px;font-weight:700;letter-spacing:0.3px;">{{ salesChannel.translated.name }}</div>';
-        $html .= '</td></tr>';
-
-        // Content
-        $html .= '<tr><td style="padding:32px;">';
-        $html .= '<p style="margin:0 0 16px 0;font-size:15px;line-height:1.5;">';
-        $html .= $greeting . ' {{ order.orderCustomer.firstName }} {{ order.orderCustomer.lastName }},';
-        $html .= '</p>';
-
-        $html .= '<p style="margin:0 0 16px 0;font-size:15px;line-height:1.5;">';
         $html .= $thanksLead . ' (' . $orderLbl . ': <strong>{{ order.orderNumber }}</strong>).<br>';
-        $html .= $body1;
-        $html .= '</p>';
+        $html .= $body1 . '<br><br>';
 
-        $html .= '<h2 style="margin:32px 0 8px 0;font-size:18px;color:#222;">' . $headline . '</h2>';
-        $html .= '<p style="margin:0 0 24px 0;font-size:15px;line-height:1.5;color:#555;">' . $body2 . '</p>';
+        $html .= '<strong style="font-size:14px;">' . $headline . '</strong><br>';
+        $html .= $body2 . '<br><br>';
 
-        // CTA
-        $html .= '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:8px auto 24px;">';
-        $html .= '<tr><td align="center" style="border-radius:6px;background:#4285F4;">';
-        $html .= '<a href="{{ sdgReviewUrl }}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:600;color:#ffffff;text-decoration:none;border-radius:6px;background:#4285F4;">';
+        // CTA-Button (table-based fuer Mail-Client-Kompatibilitaet)
+        $html .= '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 16px 0;">';
+        $html .= '<tr><td align="center" style="background:#4285F4;border-radius:4px;">';
+        $html .= '<a href="{{ sdgReviewUrl }}" style="display:inline-block;padding:12px 24px;font-size:14px;font-weight:600;color:#ffffff;text-decoration:none;">';
         $html .= '&#9733; ' . $cta;
         $html .= '</a></td></tr></table>';
 
-        $html .= '<p style="margin:16px 0 0 0;font-size:14px;line-height:1.5;color:#666;">';
+        $html .= '<br>';
         $html .= $thanksOut . '<br>';
         $html .= $teamLead . ' <strong>{{ salesChannel.translated.name }}</strong>';
-        $html .= '</p>';
-        $html .= '</td></tr>';
 
-        // Footer
-        $html .= '<tr><td style="background:#fafbfc;border-top:1px solid #eef0f3;padding:20px 32px;text-align:center;">';
-        $html .= '<p style="margin:0 0 8px 0;font-size:12px;color:#888;line-height:1.5;">';
-        $html .= $footerSent . ' <strong>{{ salesChannel.translated.name }}</strong>';
-        $html .= '</p>';
-        $html .= '<p style="margin:0;font-size:11px;color:#aaa;line-height:1.5;">';
-        $html .= $footerNote;
-        $html .= '</p>';
-        $html .= '</td></tr>';
-
-        $html .= '</table>';
-        $html .= '</td></tr></table>';
-        $html .= '</body></html>';
+        $html .= '</div>';
 
         return $html;
     }
