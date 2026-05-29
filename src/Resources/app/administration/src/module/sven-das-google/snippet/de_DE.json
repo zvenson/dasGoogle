@@ -1,0 +1,29 @@
+{
+    "sven-das-google": {
+        "general": {
+            "mainMenuItemGeneral": "Google Bewertungen",
+            "description": "Lokale Datenbank der Google Bewertungen verwalten"
+        },
+        "list": {
+            "title": "Google Bewertungen",
+            "subtitle": "Lokale Datenbank der gesammelten Google-Bewertungen.",
+            "statsTotal": "Gesamt in DB",
+            "statsAvg": "Durchschnitt",
+            "statsPlace": "Place ID",
+            "buttonRefresh": "Jetzt von Google holen",
+            "buttonRefreshLoading": "Frage Google ab …",
+            "columnAuthor": "Autor",
+            "columnRating": "Sterne",
+            "columnText": "Text",
+            "columnTime": "Datum",
+            "columnPlaceId": "Place ID",
+            "filterMinRating": "Mindest-Sterne",
+            "filterAll": "Alle",
+            "emptyState": "Noch keine Bewertungen in der DB. Erst mal API einrichten und auf „Jetzt von Google holen“ klicken.",
+            "notConfigured": "API Key oder Place ID nicht konfiguriert. Bitte in der Plugin-Konfiguration eintragen.",
+            "refreshSuccess": "{added} neue Bewertung(en) hinzugefügt — jetzt {total} insgesamt.",
+            "refreshError": "Fehler beim Abruf: {message}",
+            "loadError": "Bewertungen konnten nicht geladen werden."
+        }
+    }
+}

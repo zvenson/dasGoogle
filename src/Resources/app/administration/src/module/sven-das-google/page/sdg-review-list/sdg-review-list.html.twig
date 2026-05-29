@@ -1,0 +1,116 @@
+{% block sdg_review_list %}
+<sw-page class="sdg-review-list">
+
+    <template #smart-bar-header>
+        <h2>{{ $tc('sven-das-google.list.title') }}</h2>
+    </template>
+
+    <template #smart-bar-actions>
+        <sw-button variant="primary"
+                   :is-loading="isRefreshing"
+                   :disabled="!configured || isRefreshing"
+                   @click="onRefresh">
+            {{ isRefreshing
+                ? $tc('sven-das-google.list.buttonRefreshLoading')
+                : $tc('sven-das-google.list.buttonRefresh') }}
+        </sw-button>
+    </template>
+
+    <template #content>
+
+        <div v-if="!configured" style="padding: 24px;">
+            <sw-alert variant="warning">
+                {{ $tc('sven-das-google.list.notConfigured') }}
+            </sw-alert>
+        </div>
+
+        <template v-if="configured">
+
+            {# Stats Row #}
+            <div class="sdg-review-list__stats" style="display:flex; gap:16px; padding:16px;">
+                <div class="sdg-stat-card" style="flex:1; background:#fff; padding:16px; border:1px solid #e5e8eb; border-radius:8px;">
+                    <div style="font-size:11px; text-transform:uppercase; color:#758ca3; letter-spacing:0.5px;">
+                        {{ $tc('sven-das-google.list.statsTotal') }}
+                    </div>
+                    <div style="font-size:28px; font-weight:700; color:#222; margin-top:4px;">
+                        {{ total }}
+                    </div>
+                </div>
+                <div class="sdg-stat-card" style="flex:1; background:#fff; padding:16px; border:1px solid #e5e8eb; border-radius:8px;">
+                    <div style="font-size:11px; text-transform:uppercase; color:#758ca3; letter-spacing:0.5px;">
+                        {{ $tc('sven-das-google.list.statsAvg') }}
+                    </div>
+                    <div style="font-size:28px; font-weight:700; color:#222; margin-top:4px;">
+                        {{ averageRating }}
+                    </div>
+                </div>
+                <div class="sdg-stat-card" style="flex:2; background:#fff; padding:16px; border:1px solid #e5e8eb; border-radius:8px;">
+                    <div style="font-size:11px; text-transform:uppercase; color:#758ca3; letter-spacing:0.5px;">
+                        {{ $tc('sven-das-google.list.statsPlace') }}
+                    </div>
+                    <div style="font-size:14px; font-family:monospace; color:#222; margin-top:6px; word-break:break-all;">
+                        {{ placeId }}
+                    </div>
+                </div>
+            </div>
+
+            {# Filter #}
+            <div style="padding: 0 16px 16px 16px;">
+                <sw-single-select
+                    :value="filterMinRating"
+                    :options="ratingOptions"
+                    value-property="value"
+                    label-property="label"
+                    :label="$tc('sven-das-google.list.filterMinRating')"
+                    style="max-width:280px;"
+                    @update:value="onFilterChange"
+                />
+            </div>
+
+            <sw-loader v-if="isLoading" />
+
+            <sw-empty-state v-if="!isLoading && reviews && reviews.length === 0"
+                            :title="$tc('sven-das-google.list.emptyState')" />
+
+            <div v-if="!isLoading && reviews && reviews.length > 0"
+                 style="padding: 0 16px 16px 16px;">
+                <table style="width:100%; border-collapse:collapse; background:#fff;">
+                    <thead>
+                        <tr style="background:#f0f2f5; text-align:left; font-size:12px; text-transform:uppercase; color:#758ca3;">
+                            <th style="width:160px; padding:10px;">{{ $tc('sven-das-google.list.columnAuthor') }}</th>
+                            <th style="width:90px;  padding:10px;">{{ $tc('sven-das-google.list.columnRating') }}</th>
+                            <th style="padding:10px;">{{ $tc('sven-das-google.list.columnText') }}</th>
+                            <th style="width:110px; padding:10px;">{{ $tc('sven-das-google.list.columnTime') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in reviews"
+                            :key="item.id"
+                            style="border-bottom:1px solid #e5e8eb;">
+                            <td style="padding:10px;">
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <img v-if="item.profilePhotoUrl"
+                                         :src="item.profilePhotoUrl"
+                                         style="width:28px; height:28px; border-radius:50%; object-fit:cover;" />
+                                    <strong>{{ item.authorName }}</strong>
+                                </div>
+                            </td>
+                            <td style="padding:10px;">
+                                <span style="color:#fbbc05; font-size:14px;">{{ '★'.repeat(item.rating) }}</span><span style="color:#ddd; font-size:14px;">{{ '★'.repeat(5 - item.rating) }}</span>
+                                <span style="color:#758ca3; font-size:12px; margin-left:4px;">({{ item.rating }})</span>
+                            </td>
+                            <td style="padding:10px; color:#444; font-size:13px; line-height:1.4;">
+                                {{ previewText(item.text) }}
+                            </td>
+                            <td style="padding:10px; font-size:12px; color:#758ca3;">
+                                {{ item.relativeTimeDescription || formatDate(item.reviewTime) }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+    </template>
+
+</sw-page>
+{% endblock %}

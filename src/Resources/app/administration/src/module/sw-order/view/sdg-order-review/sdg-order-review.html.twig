@@ -1,0 +1,51 @@
+{% block sw_order_detail_base_secondary_info %}
+    {% parent %}
+
+    <sw-card v-if="order"
+             :title="'Google Bewertungseinladung'"
+             class="sdg-order-review-card"
+             style="margin-top:16px;">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            <div v-if="sdgFormattedSentAt">
+                <sw-label appearance="pill" variant="success" style="margin-bottom:8px;">
+                    ✓ Bereits versendet
+                </sw-label>
+                <div style="font-size:13px; color:#758ca3;">
+                    Versendet am: <strong>{{ sdgFormattedSentAt }}</strong>
+                </div>
+            </div>
+            <div v-else style="font-size:13px; color:#758ca3;">
+                Noch keine Bewertungsmail an diesen Kunden versendet.
+            </div>
+
+            <sw-button :is-loading="sdgIsSending"
+                       :disabled="sdgIsSending"
+                       variant="ghost"
+                       size="small"
+                       @click="sdgOpenConfirm">
+                {{ sdgFormattedSentAt ? 'Erneut senden' : 'Bewertungsmail jetzt senden' }}
+            </sw-button>
+        </div>
+
+        <sw-modal v-if="sdgShowConfirm"
+                  title="Bewertungsmail senden?"
+                  variant="small"
+                  @modal-close="sdgCloseConfirm">
+            <p>
+                Soll die Google-Bewertungseinladung an <strong>{{ order.orderCustomer?.email }}</strong> versendet werden?
+            </p>
+            <p v-if="sdgFormattedSentAt" style="color:#de8a3e; font-size:13px;">
+                ⚠ Wurde bereits am {{ sdgFormattedSentAt }} versendet.
+            </p>
+
+            <template #modal-footer>
+                <sw-button @click="sdgCloseConfirm">Abbrechen</sw-button>
+                <sw-button variant="primary"
+                           :is-loading="sdgIsSending"
+                           @click="sdgSendReviewMail">
+                    Jetzt senden
+                </sw-button>
+            </template>
+        </sw-modal>
+    </sw-card>
+{% endblock %}

@@ -182,6 +182,41 @@ frei anpassen.
 
 ---
 
+## Admin-Modul "Google Bewertungen" (ab v2.3.0)
+
+Im Admin gibt es unter **Marketing &rarr; Google Bewertungen** eine eigene
+Uebersicht, in der Sie sehen koennen:
+
+- **Wie viele Bewertungen sind aktuell in der lokalen DB**
+- **Durchschnittliche Bewertung**
+- **Welche Place ID gerade aktiv ist**
+- **Tabelle aller gespeicherten Reviews** mit Autor, Sternebewertung, Text-Vorschau und Datum
+- Filterung nach Mindest-Sterne
+- Button **"Jetzt von Google holen"** &mdash; loescht den Cache, ruft Google neu ab
+  und meldet *"X neue Bewertungen hinzugefuegt"*
+
+So koennen Sie jederzeit pruefen, ob das Plugin tatsaechlich Reviews sammelt,
+und manuell einen Refresh ausloesen.
+
+---
+
+## Order-Detail: Bewertungsmail-Status (ab v2.3.0)
+
+Beim Oeffnen einer Bestellung im Admin sehen Sie in der rechten Seitenleiste
+die Karte **"Google Bewertungseinladung"**:
+
+- Anzeige des Status: **"Noch nicht versendet"** oder **"Versendet am DD.MM.YYYY HH:MM"**
+- Button **"Bewertungsmail jetzt senden"** (bzw. "Erneut senden")
+
+Der Versand laeuft sofort durch (kein Flow-Builder-Delay), nutzt aber dasselbe
+Mail-Template wie der automatische Versand. Beim Klick erscheint eine
+Bestaetigungs-Modal-Abfrage.
+
+Das Tracking ("versendet am") funktioniert auch automatisch fuer Mails, die
+ueber den Flow Builder rausgehen &mdash; Sie sehen also auch dort den Status.
+
+---
+
 ## Entwickler & Support
 
 Dieses Plugin wird entwickelt und gepflegt von **[Designburg.net](https://designburg.net)** –

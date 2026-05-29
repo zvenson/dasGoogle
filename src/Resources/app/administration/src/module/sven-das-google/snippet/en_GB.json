@@ -1,0 +1,29 @@
+{
+    "sven-das-google": {
+        "general": {
+            "mainMenuItemGeneral": "Google reviews",
+            "description": "Manage the local database of Google reviews"
+        },
+        "list": {
+            "title": "Google reviews",
+            "subtitle": "Local database of collected Google reviews.",
+            "statsTotal": "Total in DB",
+            "statsAvg": "Average",
+            "statsPlace": "Place ID",
+            "buttonRefresh": "Fetch from Google now",
+            "buttonRefreshLoading": "Asking Google …",
+            "columnAuthor": "Author",
+            "columnRating": "Stars",
+            "columnText": "Text",
+            "columnTime": "Date",
+            "columnPlaceId": "Place ID",
+            "filterMinRating": "Min stars",
+            "filterAll": "All",
+            "emptyState": "No reviews in the DB yet. Configure API first, then click 'Fetch from Google now'.",
+            "notConfigured": "API key or Place ID not configured. Please set them in the plugin config.",
+            "refreshSuccess": "{added} new review(s) added — {total} total now.",
+            "refreshError": "Fetch failed: {message}",
+            "loadError": "Could not load reviews."
+        }
+    }
+}

@@ -16,21 +16,25 @@ use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
 use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 use Shopware\Core\Framework\Uuid\Uuid;
+use Shopware\Core\System\CustomField\CustomFieldTypes;
 
 class SvenDasGoogle extends Plugin
 {
     public const MAIL_TEMPLATE_TYPE_TECHNICAL_NAME = 'sven_das_google_review_request';
+    public const ORDER_CUSTOM_FIELD_SET_NAME = 'sven_das_google_review_mail';
 
     public function install(InstallContext $installContext): void
     {
         parent::install($installContext);
         $this->createReviewRequestMailTemplate($installContext->getContext());
+        $this->createOrderCustomFieldSet($installContext->getContext());
     }
 
     public function update(UpdateContext $updateContext): void
     {
         parent::update($updateContext);
         $this->createReviewRequestMailTemplate($updateContext->getContext());
+        $this->createOrderCustomFieldSet($updateContext->getContext());
     }
 
     public function activate(ActivateContext $activateContext): void
@@ -52,12 +56,73 @@ class SvenDasGoogle extends Plugin
         }
 
         $this->removeReviewRequestMailTemplate($uninstallContext->getContext());
+        $this->removeOrderCustomFieldSet($uninstallContext->getContext());
 
         $connection = $this->container->get(Connection::class);
         $connection->executeStatement('DROP TABLE IF EXISTS `sven_das_google_review`');
         $connection->executeStatement(
             "DELETE FROM `migration` WHERE `class` LIKE '%Sven\\\\DasGoogle\\\\Migration%'"
         );
+    }
+
+    private function createOrderCustomFieldSet(Context $context): void
+    {
+        /** @var EntityRepository $customFieldSetRepository */
+        $customFieldSetRepository = $this->container->get('custom_field_set.repository');
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('name', self::ORDER_CUSTOM_FIELD_SET_NAME));
+        $existingId = $customFieldSetRepository->searchIds($criteria, $context)->firstId();
+
+        if ($existingId !== null) {
+            return;
+        }
+
+        $customFieldSetRepository->create([[
+            'name' => self::ORDER_CUSTOM_FIELD_SET_NAME,
+            'config' => [
+                'label' => [
+                    'de-DE' => 'Google Bewertungseinladung',
+                    'en-GB' => 'Google review request',
+                    Defaults::LANGUAGE_SYSTEM => 'Google review request',
+                ],
+                'translated' => true,
+            ],
+            'customFields' => [
+                [
+                    'name' => 'sdg_review_mail_sent_at',
+                    'type' => CustomFieldTypes::DATETIME,
+                    'config' => [
+                        'label' => [
+                            'de-DE' => 'Bewertungsmail versendet am',
+                            'en-GB' => 'Review request sent at',
+                            Defaults::LANGUAGE_SYSTEM => 'Review request sent at',
+                        ],
+                        'componentName' => 'sw-field',
+                        'customFieldType' => 'date',
+                        'dateType' => 'datetime',
+                        'customFieldPosition' => 1,
+                    ],
+                ],
+            ],
+            'relations' => [
+                ['entityName' => 'order'],
+            ],
+        ]], $context);
+    }
+
+    private function removeOrderCustomFieldSet(Context $context): void
+    {
+        /** @var EntityRepository $customFieldSetRepository */
+        $customFieldSetRepository = $this->container->get('custom_field_set.repository');
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('name', self::ORDER_CUSTOM_FIELD_SET_NAME));
+        $id = $customFieldSetRepository->searchIds($criteria, $context)->firstId();
+
+        if ($id !== null) {
+            $customFieldSetRepository->delete([['id' => $id]], $context);
+        }
     }
 
     private function createReviewRequestMailTemplate(Context $context): void

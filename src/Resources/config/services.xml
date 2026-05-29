@@ -25,15 +25,27 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
-        <!-- Mail Subscriber (injects sdgReviewUrl into mail templates) -->
+        <!-- Mail Subscriber (injects sdgReviewUrl + marks order on review-template sends) -->
         <service id="Sven\DasGoogle\Subscriber\MailSubscriber">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="mail_template.repository"/>
+            <argument type="service" id="Sven\DasGoogle\Service\ReviewMailService"/>
             <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- Review Mail Service (manual send + tracking) -->
+        <service id="Sven\DasGoogle\Service\ReviewMailService">
+            <argument type="service" id="Shopware\Core\Content\Mail\Service\MailService"/>
+            <argument type="service" id="order.repository"/>
+            <argument type="service" id="mail_template.repository"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
         <!-- API Test Controller -->
         <service id="Sven\DasGoogle\Controller\Api\GoogleApiTestController" public="true">
             <argument type="service" id="Sven\DasGoogle\Service\GooglePlacesService"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="Sven\DasGoogle\Service\ReviewMailService"/>
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>

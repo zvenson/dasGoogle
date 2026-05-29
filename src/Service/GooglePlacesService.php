@@ -74,6 +74,59 @@ class GooglePlacesService
     }
 
     /**
+     * Erzwingt einen frischen API-Abruf (loescht Cache und ruft Google neu).
+     * Gibt zurueck wie viele Reviews neu hinzugekommen sind.
+     */
+    public function forceRefresh(?string $salesChannelId = null): array
+    {
+        $apiKey = $this->systemConfigService->getString('SvenDasGoogle.config.googleApiKey', $salesChannelId);
+        $placeId = $this->systemConfigService->getString('SvenDasGoogle.config.googlePlaceId', $salesChannelId);
+
+        if (empty($apiKey) || empty($placeId)) {
+            return ['success' => false, 'message' => 'API Key oder Place ID nicht konfiguriert.'];
+        }
+
+        $countBefore = $this->countReviewsForPlace($placeId);
+
+        $cacheKey = self::CACHE_KEY_PREFIX . md5($placeId);
+        $this->cache->delete($cacheKey);
+
+        $result = $this->fetchAndStoreReviews($apiKey, $placeId);
+
+        if ($result === null) {
+            return ['success' => false, 'message' => 'Google API nicht erreichbar oder Antwort ungueltig.'];
+        }
+
+        $countAfter = $this->countReviewsForPlace($placeId);
+        $added = max(0, $countAfter - $countBefore);
+
+        return [
+            'success' => true,
+            'message' => sprintf(
+                '%d neue Bewertung(en) hinzugefuegt - jetzt %d insgesamt in lokaler DB.',
+                $added,
+                $countAfter
+            ),
+            'added' => $added,
+            'total' => $countAfter,
+        ];
+    }
+
+    /**
+     * Liefert die Gesamtzahl der lokal gespeicherten Reviews fuer einen Place.
+     */
+    public function countReviewsForPlace(string $placeId): int
+    {
+        $context = Context::createDefaultContext();
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('placeId', $placeId));
+        $criteria->setLimit(1);
+        $criteria->setTotalCountMode(Criteria::TOTAL_COUNT_MODE_EXACT);
+
+        return $this->reviewRepository->searchIds($criteria, $context)->getTotal();
+    }
+
+    /**
      * Testet ob API Key und Place ID funktionieren.
      */
     public function testConnection(?string $salesChannelId = null): array
