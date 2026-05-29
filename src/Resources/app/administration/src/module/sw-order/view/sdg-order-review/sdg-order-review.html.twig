@@ -1,51 +1,60 @@
-{% block sw_order_detail_base_secondary_info %}
+{% block sw_order_detail_actions_slot_smart_bar_actions %}
     {% parent %}
 
-    <sw-card v-if="order"
-             :title="'Google Bewertungseinladung'"
-             class="sdg-order-review-card"
-             style="margin-top:16px;">
-        <div style="display:flex; flex-direction:column; gap:12px;">
-            <div v-if="sdgFormattedSentAt">
-                <sw-label appearance="pill" variant="success" style="margin-bottom:8px;">
+    <mt-button v-if="order"
+               variant="secondary"
+               size="default"
+               class="sdg-order-detail__review-mail-button"
+               @click="sdgOpenModal">
+        <span v-if="sdgFormattedSentAt" style="color:#37d979; margin-right:4px;">✓</span>
+        Bewertungsmail
+    </mt-button>
+
+    <sw-modal v-if="sdgShowModal && order"
+              title="Google Bewertungseinladung"
+              variant="small"
+              @modal-close="sdgCloseModal">
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+            <div v-if="sdgFormattedSentAt"
+                 style="background:#e8f8ee; border:1px solid #b7e6c8; border-radius:6px; padding:12px 14px;">
+                <div style="font-size:13px; color:#1a7e3c; font-weight:600; margin-bottom:4px;">
                     ✓ Bereits versendet
-                </sw-label>
-                <div style="font-size:13px; color:#758ca3;">
-                    Versendet am: <strong>{{ sdgFormattedSentAt }}</strong>
+                </div>
+                <div style="font-size:13px; color:#444;">
+                    Am: <strong>{{ sdgFormattedSentAt }}</strong>
                 </div>
             </div>
-            <div v-else style="font-size:13px; color:#758ca3;">
-                Noch keine Bewertungsmail an diesen Kunden versendet.
+
+            <div v-else style="background:#f4f6f8; border:1px solid #e0e0e0; border-radius:6px; padding:12px 14px; font-size:13px; color:#666;">
+                Noch keine Google-Bewertungseinladung an diesen Kunden versendet.
             </div>
 
-            <sw-button :is-loading="sdgIsSending"
-                       :disabled="sdgIsSending"
-                       variant="ghost"
-                       size="small"
-                       @click="sdgOpenConfirm">
-                {{ sdgFormattedSentAt ? 'Erneut senden' : 'Bewertungsmail jetzt senden' }}
-            </sw-button>
+            <div style="font-size:13px; color:#444;">
+                Soll die Mail an
+                <strong>{{ order.orderCustomer && order.orderCustomer.email }}</strong>
+                versendet werden?
+            </div>
+
+            <div style="font-size:12px; color:#999;">
+                Es wird das Mail-Template <em>"Google Bewertungseinladung"</em> verwendet,
+                sofortiger Versand ohne Flow-Builder-Delay.
+            </div>
         </div>
 
-        <sw-modal v-if="sdgShowConfirm"
-                  title="Bewertungsmail senden?"
-                  variant="small"
-                  @modal-close="sdgCloseConfirm">
-            <p>
-                Soll die Google-Bewertungseinladung an <strong>{{ order.orderCustomer?.email }}</strong> versendet werden?
-            </p>
-            <p v-if="sdgFormattedSentAt" style="color:#de8a3e; font-size:13px;">
-                ⚠ Wurde bereits am {{ sdgFormattedSentAt }} versendet.
-            </p>
-
-            <template #modal-footer>
-                <sw-button @click="sdgCloseConfirm">Abbrechen</sw-button>
-                <sw-button variant="primary"
-                           :is-loading="sdgIsSending"
-                           @click="sdgSendReviewMail">
-                    Jetzt senden
-                </sw-button>
-            </template>
-        </sw-modal>
-    </sw-card>
+        <template #modal-footer>
+            <mt-button variant="secondary"
+                       size="default"
+                       @click="sdgCloseModal">
+                Abbrechen
+            </mt-button>
+            <mt-button variant="primary"
+                       size="default"
+                       :is-loading="sdgIsSending"
+                       :disabled="sdgIsSending"
+                       @click="sdgSendReviewMail">
+                {{ sdgFormattedSentAt ? 'Erneut senden' : 'Jetzt senden' }}
+            </mt-button>
+        </template>
+    </sw-modal>
 {% endblock %}

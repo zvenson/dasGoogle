@@ -2,7 +2,7 @@ import template from './sdg-order-review.html.twig';
 
 const { Component } = Shopware;
 
-Component.override('sw-order-detail-base', {
+Component.override('sw-order-detail', {
     template,
 
     mixins: [Shopware.Mixin.getByName('notification')],
@@ -10,7 +10,7 @@ Component.override('sw-order-detail-base', {
     data() {
         return {
             sdgIsSending:  false,
-            sdgShowConfirm: false,
+            sdgShowModal:  false,
         };
     },
 
@@ -34,12 +34,12 @@ Component.override('sw-order-detail-base', {
     },
 
     methods: {
-        sdgOpenConfirm() {
-            this.sdgShowConfirm = true;
+        sdgOpenModal() {
+            this.sdgShowModal = true;
         },
 
-        sdgCloseConfirm() {
-            this.sdgShowConfirm = false;
+        sdgCloseModal() {
+            this.sdgShowModal = false;
         },
 
         async sdgSendReviewMail() {
@@ -55,10 +55,10 @@ Component.override('sw-order-detail-base', {
                 if (res.data.success) {
                     this.createNotificationSuccess({ message: res.data.message });
                     // Reload to pick up the new custom field timestamp
-                    if (typeof this.reloadEntityData === 'function') {
+                    if (typeof this.loadOrder === 'function') {
+                        this.loadOrder();
+                    } else if (typeof this.reloadEntityData === 'function') {
                         this.reloadEntityData();
-                    } else if (typeof this.$emit === 'function') {
-                        this.$emit('order-edit-save');
                     }
                 } else {
                     this.createNotificationError({ message: res.data.message || 'Versand fehlgeschlagen.' });
@@ -69,7 +69,7 @@ Component.override('sw-order-detail-base', {
                 });
             }
             this.sdgIsSending = false;
-            this.sdgShowConfirm = false;
+            this.sdgShowModal = false;
         },
     },
 });

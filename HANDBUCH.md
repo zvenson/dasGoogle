@@ -202,15 +202,17 @@ und manuell einen Refresh ausloesen.
 
 ## Order-Detail: Bewertungsmail-Status (ab v2.3.0)
 
-Beim Oeffnen einer Bestellung im Admin sehen Sie in der rechten Seitenleiste
-die Karte **"Google Bewertungseinladung"**:
+Beim Oeffnen einer Bestellung im Admin erscheint oben rechts in der Smart Bar
+neben den "Abbrechen"/"Speichern"-Buttons ein zusaetzlicher Button:
 
-- Anzeige des Status: **"Noch nicht versendet"** oder **"Versendet am DD.MM.YYYY HH:MM"**
-- Button **"Bewertungsmail jetzt senden"** (bzw. "Erneut senden")
+- **"Bewertungsmail"** &mdash; mit gruenem Haken davor, wenn bereits versendet
+
+Beim Klick oeffnet sich ein Dialog mit:
+- Status: **"Noch nicht versendet"** oder **"Bereits versendet am DD.MM.YYYY HH:MM"**
+- Button **"Jetzt senden"** (bzw. "Erneut senden")
 
 Der Versand laeuft sofort durch (kein Flow-Builder-Delay), nutzt aber dasselbe
-Mail-Template wie der automatische Versand. Beim Klick erscheint eine
-Bestaetigungs-Modal-Abfrage.
+Mail-Template wie der automatische Versand.
 
 Das Tracking ("versendet am") funktioniert auch automatisch fuer Mails, die
 ueber den Flow Builder rausgehen &mdash; Sie sehen also auch dort den Status.
