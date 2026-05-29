@@ -81,6 +81,7 @@
                             <th style="width:90px;  padding:10px;">{{ $tc('sven-das-google.list.columnRating') }}</th>
                             <th style="padding:10px;">{{ $tc('sven-das-google.list.columnText') }}</th>
                             <th style="width:110px; padding:10px;">{{ $tc('sven-das-google.list.columnTime') }}</th>
+                            <th style="width:60px;  padding:10px;"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,10 +106,49 @@
                             <td style="padding:10px; font-size:12px; color:#758ca3;">
                                 {{ item.relativeTimeDescription || formatDate(item.reviewTime) }}
                             </td>
+                            <td style="padding:10px; text-align:right;">
+                                <mt-button variant="critical"
+                                           size="x-small"
+                                           square
+                                           :title="$tc('sven-das-google.list.deleteButtonTitle')"
+                                           @click="askDelete(item)">
+                                    <sw-icon name="regular-trash-s" size="14" />
+                                </mt-button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
+            {# Delete confirmation modal #}
+            <sw-modal v-if="confirmDelete"
+                      :title="$tc('sven-das-google.list.deleteModalTitle')"
+                      variant="small"
+                      @modal-close="cancelDelete">
+                <p style="margin:0 0 12px 0;">
+                    {{ $tc('sven-das-google.list.deleteModalText') }}
+                </p>
+                <p style="margin:0; padding:10px 12px; background:#f4f6f8; border-radius:4px; font-size:13px;">
+                    <strong>{{ confirmDelete.authorName }}</strong>
+                    ({{ confirmDelete.rating }} ★)<br>
+                    <span style="color:#758ca3;">{{ previewText(confirmDelete.text) }}</span>
+                </p>
+                <p style="margin:12px 0 0 0; font-size:12px; color:#de8a3e;">
+                    {{ $tc('sven-das-google.list.deleteModalHint') }}
+                </p>
+
+                <template #modal-footer>
+                    <mt-button variant="secondary" @click="cancelDelete">
+                        {{ $tc('global.default.cancel') }}
+                    </mt-button>
+                    <mt-button variant="critical"
+                               :is-loading="isDeleting"
+                               :disabled="isDeleting"
+                               @click="doDelete">
+                        {{ $tc('sven-das-google.list.deleteConfirm') }}
+                    </mt-button>
+                </template>
+            </sw-modal>
         </template>
     </template>
 

@@ -18,6 +18,8 @@ Shopware.Component.register('sdg-review-list', {
             filterMinRating: 0,
             placeId:        '',
             configured:     false,
+            confirmDelete:  null,
+            isDeleting:     false,
         };
     },
 
@@ -137,6 +139,34 @@ Shopware.Component.register('sdg-review-list', {
             if (!unixTime) return '–';
             const d = new Date(unixTime * 1000);
             return d.toLocaleDateString();
+        },
+
+        askDelete(item) {
+            this.confirmDelete = item;
+        },
+
+        cancelDelete() {
+            this.confirmDelete = null;
+        },
+
+        async doDelete() {
+            if (!this.confirmDelete) return;
+            const id = this.confirmDelete.id;
+            this.isDeleting = true;
+            try {
+                await this.reviewRepository.delete(id, Shopware.Context.api);
+                this.createNotificationSuccess({
+                    message: this.$tc('sven-das-google.list.deleteSuccess'),
+                });
+                this.confirmDelete = null;
+                await this.loadReviews();
+                await this.loadStats();
+            } catch (e) {
+                this.createNotificationError({
+                    message: this.$tc('sven-das-google.list.deleteError') + ' ' + (e.message || ''),
+                });
+            }
+            this.isDeleting = false;
         },
     },
 });

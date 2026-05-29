@@ -23,7 +23,14 @@
             "notConfigured": "API key or Place ID not configured. Please set them in the plugin config.",
             "refreshSuccess": "{added} new review(s) added — {total} total now.",
             "refreshError": "Fetch failed: {message}",
-            "loadError": "Could not load reviews."
+            "loadError": "Could not load reviews.",
+            "deleteButtonTitle": "Delete this review from the local DB",
+            "deleteModalTitle": "Delete review?",
+            "deleteModalText": "This review will be removed from the local database:",
+            "deleteModalHint": "Heads up: on the next API refresh Google might return this review again and it would be re-stored. To prevent that, wait before refreshing or delete it again later.",
+            "deleteConfirm": "Delete permanently",
+            "deleteSuccess": "Review deleted.",
+            "deleteError": "Delete failed:"
         }
     }
 }

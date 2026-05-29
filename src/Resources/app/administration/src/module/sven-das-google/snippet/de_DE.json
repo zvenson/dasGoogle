@@ -23,7 +23,14 @@
             "notConfigured": "API Key oder Place ID nicht konfiguriert. Bitte in der Plugin-Konfiguration eintragen.",
             "refreshSuccess": "{added} neue Bewertung(en) hinzugefügt — jetzt {total} insgesamt.",
             "refreshError": "Fehler beim Abruf: {message}",
-            "loadError": "Bewertungen konnten nicht geladen werden."
+            "loadError": "Bewertungen konnten nicht geladen werden.",
+            "deleteButtonTitle": "Diese Bewertung aus der lokalen DB löschen",
+            "deleteModalTitle": "Bewertung löschen?",
+            "deleteModalText": "Diese Bewertung wird aus der lokalen Datenbank entfernt:",
+            "deleteModalHint": "Hinweis: Beim nächsten API-Refresh könnte Google diese Bewertung erneut liefern und sie würde wieder gespeichert. Falls du das verhindern willst: warte mit dem Refresh oder lösche sie wiederholt.",
+            "deleteConfirm": "Endgültig löschen",
+            "deleteSuccess": "Bewertung wurde gelöscht.",
+            "deleteError": "Löschen fehlgeschlagen:"
         }
     }
 }
