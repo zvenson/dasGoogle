@@ -1,7 +1,7 @@
 {
     "name": "sven/das-google",
     "description": "Google Business Bewertungen als Floating-Widget und CMS-Element fuer Erlebniswelten.",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "type": "shopware-platform-plugin",
     "license": "proprietary",
     "homepage": "https://designburg.net",
