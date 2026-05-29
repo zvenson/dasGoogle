@@ -5,8 +5,6 @@ const { Component } = Shopware;
 Component.override('sw-order-detail-base', {
     template,
 
-    inject: ['systemConfigApiService'],
-
     mixins: [Shopware.Mixin.getByName('notification')],
 
     data() {
@@ -29,6 +27,10 @@ Component.override('sw-order-detail-base', {
                 return this.sdgReviewMailSentAt;
             }
         },
+
+        sdgHttpClient() {
+            return Shopware.Application.getContainer('init').httpClient;
+        },
     },
 
     methods: {
@@ -45,12 +47,9 @@ Component.override('sw-order-detail-base', {
 
             this.sdgIsSending = true;
             try {
-                const res = await this.systemConfigApiService.httpClient.post(
-                    `/api/_action/sven-das-google/send-review-mail/${this.order.id}`,
-                    {},
-                    {
-                        headers: this.systemConfigApiService.getBasicHeaders(),
-                    }
+                const res = await this.sdgHttpClient.post(
+                    `_action/sven-das-google/send-review-mail/${this.order.id}`,
+                    {}
                 );
 
                 if (res.data.success) {

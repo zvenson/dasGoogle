@@ -5,7 +5,7 @@ const { Criteria } = Shopware.Data;
 Shopware.Component.register('sdg-review-list', {
     template,
 
-    inject: ['repositoryFactory', 'systemConfigApiService'],
+    inject: ['repositoryFactory'],
 
     mixins: [Shopware.Mixin.getByName('notification')],
 
@@ -18,13 +18,16 @@ Shopware.Component.register('sdg-review-list', {
             filterMinRating: 0,
             placeId:        '',
             configured:     false,
-            apiBase:        '/api/sven-das-google',
         };
     },
 
     computed: {
         reviewRepository() {
             return this.repositoryFactory.create('sven_das_google_review');
+        },
+
+        httpClient() {
+            return Shopware.Application.getContainer('init').httpClient;
         },
 
         ratingOptions() {
@@ -64,15 +67,12 @@ Shopware.Component.register('sdg-review-list', {
     methods: {
         async loadStats() {
             try {
-                const res = await this.systemConfigApiService.httpClient.get(
-                    this.apiBase + '/stats',
-                    {
-                        headers: this.systemConfigApiService.getBasicHeaders(),
-                    }
-                );
+                const res = await this.httpClient.get('sven-das-google/stats');
                 this.placeId = res.data.placeId || '';
                 this.configured = !!res.data.configured;
-                this.total = res.data.total || 0;
+                if (typeof res.data.total === 'number') {
+                    this.total = res.data.total;
+                }
             } catch (e) {
                 this.configured = false;
             }
@@ -98,13 +98,9 @@ Shopware.Component.register('sdg-review-list', {
         async onRefresh() {
             this.isRefreshing = true;
             try {
-                const res = await this.systemConfigApiService.httpClient.post(
-                    this.apiBase + '/refresh-reviews',
-                    {},
-                    {
-                        headers: this.systemConfigApiService.getBasicHeaders(),
-                    }
-                );
+                const res = await this.httpClient.post('sven-das-google/refresh-reviews', {
+                    salesChannelId: null,
+                });
 
                 if (res.data.success) {
                     this.createNotificationSuccess({
@@ -125,7 +121,7 @@ Shopware.Component.register('sdg-review-list', {
             } catch (e) {
                 this.createNotificationError({
                     message: this.$tc('sven-das-google.list.refreshError', 0, {
-                        message: e.message,
+                        message: e.response?.data?.message || e.message,
                     }),
                 });
             }

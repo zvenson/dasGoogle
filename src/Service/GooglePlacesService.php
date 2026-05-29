@@ -109,6 +109,7 @@ class GooglePlacesService
             ),
             'added' => $added,
             'total' => $countAfter,
+            'placeId' => $placeId,
         ];
     }
 
